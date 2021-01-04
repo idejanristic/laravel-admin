@@ -6,6 +6,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpFoundation\Response;
+use App\Http\Requests\UserCreateRequest;
+use App\Http\Requests\UserUpdateRequest;
 
 class UserController extends Controller
 {
@@ -19,28 +21,23 @@ class UserController extends Controller
         return User::find($id);
     }
 
-    public function store(Request $request) 
+    public function store(UserCreateRequest $request) 
     {
         $user = User::create([
             'firstname' => $request->input('firstname'),
             'lastname' => $request->input('lastname'),
             'email' => $request->input('email'),
-            'password' => Hash::make($request->input('password')),
+            'password' => Hash::make(1234),
         ]);
         
         return response($user, Response::HTTP_CREATED);
     }
 
-    public function update(Request $request, $id)
+    public function update(UserUpdateRequest $request, $id)
     {
         $user = User::find($id);
 
-        $user->update([
-            'firstname' => $request->input('firstname'),
-            'lastname' => $request->input('lastname'),
-            'email' => $request->input('email'),
-            'password' => Hash::make($request->input('password')),
-        ]);
+        $user->update($request->only('firstname','lastname', 'email'));
 
         return response($user, Response::HTTP_ACCEPTED);
     }
