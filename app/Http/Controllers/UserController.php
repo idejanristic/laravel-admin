@@ -13,7 +13,7 @@ class UserController extends Controller
 {
     public function index() 
     {
-        return User::all();
+        return User::paginate();
     }
 
     public function show($id) 
@@ -23,10 +23,7 @@ class UserController extends Controller
 
     public function store(UserCreateRequest $request) 
     {
-        $user = User::create([
-            'firstname' => $request->input('firstname'),
-            'lastname' => $request->input('lastname'),
-            'email' => $request->input('email'),
+        $user = User::create($request->only('firstname','lastname', 'email') + [
             'password' => Hash::make(1234),
         ]);
         
