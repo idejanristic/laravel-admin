@@ -2,13 +2,53 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller
 {
     public function index() 
     {
         return User::all();
+    }
+
+    public function show($id) 
+    {
+        return User::find($id);
+    }
+
+    public function store(Request $request) 
+    {
+        $user = User::create([
+            'firstname' => $request->input('firstname'),
+            'lastname' => $request->input('lastname'),
+            'email' => $request->input('email'),
+            'password' => Hash::make($request->input('password')),
+        ]);
+        
+        return response($user, Response::HTTP_CREATED);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $user = User::find($id);
+
+        $user->update([
+            'firstname' => $request->input('firstname'),
+            'lastname' => $request->input('lastname'),
+            'email' => $request->input('email'),
+            'password' => Hash::make($request->input('password')),
+        ]);
+
+        return response($user, Response::HTTP_ACCEPTED);
+    }
+
+    public function destroy($id) 
+    {
+        User::destroy($id);
+
+        return response(null, Response::HTTP_NO_CONTENT);
     }
 }
