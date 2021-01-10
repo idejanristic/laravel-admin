@@ -12,14 +12,14 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    protected $guarded = ['id'];
-
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
+    protected $guarded = ['id'];    
+  
     protected $hidden = [
         'password'
     ];
+
+    public function role() 
+    {
+        return $this->belongsTo(Role::class);
+    }
 }

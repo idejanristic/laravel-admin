@@ -11,35 +11,40 @@ use App\Http\Requests\UserUpdateRequest;
 use App\Http\Requests\UpdateInofRequest;
 use App\Http\Requests\UpdateEmailRequest;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Resources\UserResource;
 
 class UserController extends Controller
 {
     public function index() 
     {
-        return User::paginate();
+        $users = User::paginate();
+
+        return UserResource::collection($users);
     }
 
     public function show($id) 
     {
-        return User::find($id);
+        $user = User::find($id);
+
+        return new UserResource($user);
     }
 
     public function store(UserCreateRequest $request) 
     {
-        $user = User::create($request->only('firstname','lastname', 'email') + [
+        $user = User::create($request->only('firstname','lastname', 'email', 'role_id') + [
             'password' => Hash::make(1234),
         ]);
         
-        return response($user, Response::HTTP_CREATED);
+        return response(new UserResource($user), Response::HTTP_CREATED);
     }
 
     public function update(UserUpdateRequest $request, $id)
     {
         $user = User::find($id);
 
-        $user->update($request->only('firstname','lastname', 'email'));
+        $user->update($request->only('firstname','lastname', 'email', 'role_id'));
 
-        return response($user, Response::HTTP_ACCEPTED);
+        return response(new UserResource($user), Response::HTTP_ACCEPTED);
     }
 
     public function destroy($id) 
@@ -59,7 +64,7 @@ class UserController extends Controller
         $user = Auth::user();
         $user->update($request->only('firstname', 'lastname', 'email'));
 
-        return response($user, Response::HTTP_ACCEPTED);
+        return response(new UserResource($user), Response::HTTP_ACCEPTED);
     }
 
     public function updatePassword(updatePasswordRequest $request)
@@ -69,6 +74,6 @@ class UserController extends Controller
             'password' => Hash::make($request->input('password'))
         ]);
 
-        return response($user, Response::HTTP_ACCEPTED);
+        return response(new UserResource($user), Response::HTTP_ACCEPTED);
     }
 }
