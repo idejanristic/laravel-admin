@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\UserCreateRequest;
 use App\Http\Requests\UserUpdateRequest;
+use App\Http\Requests\UpdateInofRequest;
+use App\Http\Requests\UpdateEmailRequest;
 use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
@@ -52,7 +54,7 @@ class UserController extends Controller
         return Auth::user();
     }
 
-    public function updateInfo(Request $request)
+    public function updateInfo(UpdateInfoRequest $request)
     {
         $user = Auth::user();
         $user->update($request->only('firstname', 'lastname', 'email'));
@@ -60,7 +62,7 @@ class UserController extends Controller
         return response($user, Response::HTTP_ACCEPTED);
     }
 
-    public function updatePassword(Request $request)
+    public function updatePassword(updatePasswordRequest $request)
     {
         $user = Auth::user();
         $user->update([
