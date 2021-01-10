@@ -30,4 +30,8 @@ Route::middleware(['auth:api'])->group(function () {
     Route::post('users', [UserController::class, 'store']);
     Route::put('users/{id}', [UserController::class, 'update']);
     Route::delete('users/{id}', [UserController::class, 'destroy']);
+
+    Route::get('user', [UserController::class, 'user']);
+    Route::put('users/info', [UserController::class, 'updateInfo']);
+    Route::put('users/password', [UserController::class, 'updatePassword']);
 });
