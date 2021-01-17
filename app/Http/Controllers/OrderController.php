@@ -7,11 +7,14 @@ use Symfony\Component\HttpFoundation\Response;
 use App\Models\Order;
 use App\Http\Resources\OrderResource;
 use App\Http\Resources\OrderItemResource;
+use Illuminate\Support\Facades\Gate;
 
 class OrderController extends Controller
 {
     public function index() 
     {
+        Gate::authorize('view', 'orders');
+
         $oreders = Order::paginate();
 
         return OrderResource::collection($oreders);
@@ -19,11 +22,15 @@ class OrderController extends Controller
 
     public function show()
     {
+        Gate::authorize('view', 'orders');
+
         return new OrderResource(Order::find($id));
     }
 
     public function export()
     {
+        Gate::authorize('view', 'orders');
+
         $headers = [
             'Content-type' => 'text/csv',
             'Content-Disposition' => 'attachment; filename=orders.csv',
