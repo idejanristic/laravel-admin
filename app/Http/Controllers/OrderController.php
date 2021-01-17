@@ -13,7 +13,7 @@ class OrderController extends Controller
     {
         $oreders = Order::paginate();
 
-        return OrderResource::collectionn($oreders);
+        return OrderResource::collection($oreders);
     }
 
     public function show()
