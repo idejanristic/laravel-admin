@@ -24,6 +24,8 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PermissionController;
+
 
 Route::post('login', [AuthController::class, 'login']);
 Route::post('register', [AuthController::class, 'register']);
@@ -42,4 +44,6 @@ Route::middleware(['auth:api'])->group(function () {
     Route::resource('orders', OrderController::class)->only([
         'index', 'show'
     ]);
+
+    Route::resource('permissions', PermissionController::class)->only(['index']);
 });
